@@ -1,7 +1,8 @@
+# src/routes/user.py
 from flask import Blueprint, jsonify
 
-user_bp = Blueprint('user', __name__)
+user_bp = Blueprint('user_bp', __name__)
 
-@user_bp.route('/test', methods=['GET'])
-def test():
-    return jsonify({"message": "This is the user route"})
+@user_bp.route("/ping", methods=["GET"])
+def user_ping():
+    return jsonify({"message": "User route working!"})
