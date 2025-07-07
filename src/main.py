@@ -1,18 +1,18 @@
-from flask import Flask
-from src.routes.auth import auth_bp
-from src.routes.user import user_bp
-from src.routes.payment import payment_bp
-from src.routes.zipper import zipper_bp
+# app.py
+from flask import Flask, jsonify
+from flask_cors import CORS
+from dotenv import load_dotenv
+import os
 
-def create_app():
-    app = Flask(__name__)
-    app.config.from_pyfile('config.py')
+load_dotenv()
 
-    app.register_blueprint(auth_bp, url_prefix='/auth')
-    app.register_blueprint(user_bp, url_prefix='/user')
-    app.register_blueprint(payment_bp, url_prefix='/payment')
-    app.register_blueprint(zipper_bp, url_prefix='/zipper')
+app = Flask(__name__)
+CORS(app)
 
-    return app
+@app.route("/")
+def index():
+    return "ChillZip backend is live!"
 
-app = create_app()
+@app.route("/test")
+def test():
+    return jsonify({"message": "Test route working!"})
