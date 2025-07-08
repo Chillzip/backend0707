@@ -1,14 +1,13 @@
 from flask import Blueprint, request, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
-from src.database import db
-from src.models.user import User
+from database import db
+from models.user import User
 import jwt
 import datetime
 import os
 
 auth_bp = Blueprint('auth_bp', __name__)
 
-# Register Route
 @auth_bp.route('/register', methods=['POST'])
 def register():
     data = request.get_json()
@@ -30,7 +29,6 @@ def register():
 
     return jsonify({"message": "User registered successfully"}), 201
 
-# Login Route
 @auth_bp.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
@@ -48,7 +46,6 @@ def login():
 
     return jsonify({ "token": token }), 200
 
-# Optional test route
 @auth_bp.route("/ping", methods=["GET"])
 def auth_ping():
     return jsonify({"message": "Auth route working!"})

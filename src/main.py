@@ -9,27 +9,22 @@ load_dotenv()
 app = Flask(__name__)
 CORS(app)
 
-# Secret key (used for session or token handling)
 app.config['SECRET_KEY'] = os.getenv("SECRET_KEY", "fallback-secret-key")
 
-# Import Blueprints after app creation to avoid circular imports
 from routes.auth import auth_bp
 from routes.user import user_bp
 from routes.payment import payment_bp
 from routes.zipper import zipper_bp
 
-# Register all Blueprints with URL prefixes
 app.register_blueprint(auth_bp, url_prefix="/auth")
 app.register_blueprint(user_bp, url_prefix="/user")
 app.register_blueprint(payment_bp, url_prefix="/payment")
 app.register_blueprint(zipper_bp, url_prefix="/zip")
 
-# Optional root route
 @app.route('/')
 def home():
     return {"message": "✅ ChillZip backend is running."}
 
-# Entry point
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
     app.run(host="0.0.0.0", port=port, debug=True)
