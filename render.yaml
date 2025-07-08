@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: chillzip
+    env: python
+    buildCommand: ""
+    startCommand: "gunicorn src.wsgi:app"
+    autoDeploy: true

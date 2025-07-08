@@ -1,18 +1,35 @@
-# src/main.py
-
 from flask import Flask
-from src.routes.auth import auth_bp  # Import the auth blueprint
+from flask_cors import CORS
+from dotenv import load_dotenv
+import os
+
+# Load environment variables
+load_dotenv()
 
 app = Flask(__name__)
+CORS(app)
 
-# Register the auth blueprint
-app.register_blueprint(auth_bp)
+# Secret key (used for session or token handling)
+app.config['SECRET_KEY'] = os.getenv("SECRET_KEY", "fallback-secret-key")
 
-# Optional: Add a root route so the homepage isn't blank
-@app.route("/")
+# Import Blueprints after app creation to avoid circular imports
+from routes.auth import auth_bp
+from routes.user import user_bp
+from routes.payment import payment_bp
+from routes.zipper import zipper_bp
+
+# Register all Blueprints with URL prefixes
+app.register_blueprint(auth_bp, url_prefix="/auth")
+app.register_blueprint(user_bp, url_prefix="/user")
+app.register_blueprint(payment_bp, url_prefix="/payment")
+app.register_blueprint(zipper_bp, url_prefix="/zip")
+
+# Optional root route
+@app.route('/')
 def home():
-    return {"message": "Welcome to ChillZip API"}
+    return {"message": "✅ ChillZip backend is running."}
 
-# This line is only needed for local testing — not required for Render
+# Entry point
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=True)
